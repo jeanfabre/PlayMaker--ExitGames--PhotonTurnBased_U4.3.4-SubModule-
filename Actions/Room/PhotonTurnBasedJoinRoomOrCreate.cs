@@ -32,10 +32,10 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("Max number of players that can be in the room at any time. 0 means 'no limit'.")]
 		public FsmInt maxNumberOfPLayers;
 		
-		[Tooltip("Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds. Set to none ot -1 for not timeout")]
+		[Tooltip("Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds. Set to none for for no timeout")]
 		public FsmInt playerTtl;
 		
-		[Tooltip("Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds.")]
+		[Tooltip("Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds. Set to none for max value")]
 		public FsmInt emptyRoomTtl;
 		
 		[Tooltip("Activates UserId checks on joining - allowing a users to be only once in the room.")]
