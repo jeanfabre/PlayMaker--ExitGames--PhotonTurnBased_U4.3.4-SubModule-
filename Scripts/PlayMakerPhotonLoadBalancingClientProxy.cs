@@ -53,9 +53,7 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 
 		void Start()
 		{
-
 			Application.runInBackground = true;
-
 			CustomTypes.Register();
 		}
 
@@ -86,11 +84,22 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 			LbcInstance.OnStateChangeAction += this.OnStateChanged;
 			LbcInstance.OnStatusChangedAction += this.OnStatusChanged;
 
+			LbcInstance.OnEventAction += this.OnEventCallback;
 			if (OnServiceStarted!=null)
 			{
 				OnServiceStarted();
 			}
 			return LbcInstance;
+		}
+
+		private void OnEventCallback(EventData photonEvent)
+		{	
+			if (EventCodetoPlayMakerEventsLUT.ContainsKey(photonEvent.Code))
+			{
+				string _e = EventCodetoPlayMakerEventsLUT[photonEvent.Code];
+				if (debug) Debug.Log("OnEventCallback ->"+photonEvent.Code+" -> "+_e);
+				PlayMakerFSM.BroadcastEvent(_e);
+			}
 		}
 
 		private void OnStateChanged (ClientState clientState)
@@ -122,6 +131,22 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 				break;
 			}
 		}
+
+
+		static Dictionary<byte, string> EventCodetoPlayMakerEventsLUT = new Dictionary<byte, string>()
+		{
+			{ EventCode.AppStats,			 				"PHOTON TURNBASED / EVENT / APP STATS"},
+			{ EventCode.CacheSliceChanged,			 		"PHOTON TURNBASED / EVENT / CACHE SLICE CHANGED"},
+			{ EventCode.Disconnect,			 				"PHOTON TURNBASED / EVENT / DISCONNECT"},
+			{ EventCode.ErrorInfo,			 				"PHOTON TURNBASED / EVENT / ERROR INFO"},
+			{ EventCode.GameList,			 				"PHOTON TURNBASED / EVENT / GAME LIST"},
+			{ EventCode.GameListUpdate,			 			"PHOTON TURNBASED / EVENT / GAME LIST UPDATE"},
+			{ EventCode.Join,			 					"PHOTON TURNBASED / EVENT / JOIN"},
+			{ EventCode.Leave,			 					"PHOTON TURNBASED / EVENT / LEAVE"},
+			{ EventCode.Match,			 					"PHOTON TURNBASED / EVENT / MATCH"},
+			{ EventCode.PropertiesChanged,			 		"PHOTON TURNBASED / EVENT / PROPERTIES CHANGED"},
+			{ EventCode.QueueState,			 				"PHOTON TURNBASED / EVENT / QUEUE STATE"}
+		};
 
 		static Dictionary<ClientState, string> clientStatetoPlayMakerEventsLUT = new Dictionary<ClientState, string>()
 		{

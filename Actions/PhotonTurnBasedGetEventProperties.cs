@@ -12,6 +12,7 @@ namespace HutongGames.PlayMaker.Actions
 	[ActionCategory(ActionCategory.StateMachine)]
 	[Tooltip("Gets properties on the last Photon turn Based event that caused a state change. \n" +
 		"Keys are using enum to remove guess work and potential issues with string based keys.\n" +
+		"It however will check the enum string name, int value and byte value in order, so that all common cases are taken in account.\n" +
 		"Use Set Event Enum Properties to define these values when sending events")]
 	public class PhotonTurnBasedGetEventProperties : FsmStateAction
 	{
@@ -49,12 +50,23 @@ namespace HutongGames.PlayMaker.Actions
 				for (int i = 0; i < keys.Length; i++) 
 				{	
 					Debug.Log("getting key "+i+" ->"+keys[i].Value);
+
 					string _keyval = Enum.GetName(keys[i].EnumType,  keys[i].Value);
+					int _keyvalInt =  (int)((object)keys[i].Value);
 					if (Properties.ContainsKey(_keyval))
 					{
-						Debug.Log("found key "+i+" ->"+keys[i].Value+" ="+Properties[_keyval]);
+						Debug.Log("found key via string "+i+" ->"+keys[i].Value+" ="+Properties[_keyval]);
 						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[_keyval]);
-					}else{
+					}else if (Properties.ContainsKey(_keyvalInt))
+					{
+						Debug.Log("found key via int "+i+" ->"+keys[i].Value+" ="+Properties[_keyvalInt]);
+						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[_keyvalInt]);
+					}else if (Properties.ContainsKey((byte)_keyvalInt))
+					{
+						Debug.Log("found key via byte "+i+" ->"+keys[i].Value+" ="+Properties[(byte)_keyvalInt]);
+						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[(byte)_keyvalInt]);
+					}else
+					{
 						Fsm.Event(notFoundEvent);
 					}
 				}

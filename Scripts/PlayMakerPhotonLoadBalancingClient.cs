@@ -28,22 +28,23 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 		/// <summary>
 		/// Use this Action to be informed when the GameList is received
 		/// </summary>
-		public Action 						OnGameListReceivedAction		{ get; set; }
+		public Action						OnGameListReceivedAction		{ get; set; }
 
 		/// <summary>
 		/// Use this Action to be informed when joining a game Operation got a response 
 		/// </summary>
-		public Action<short> 			OnJoinGameResponseAction		{ get; set; }
+		public Action<short>				OnJoinGameResponseAction		{ get; set; }
 
 		/// <summary>
 		/// Use this Action to be informed when joining a random game Operation got a response 
 		/// </summary>
-		public Action<short> 			OnJoinRandomGameResponseAction		{ get; set; }
+		public Action<short>				OnJoinRandomGameResponseAction	{ get; set; }
 
 		public Action<StatusCode> 			OnStatusChangedAction			{ get; set; }
-		//public Action<DebugLevel, string> 	OnDebugReturnAction				{ get; set; }
+		//public Action<DebugLevel, string> OnDebugReturnAction				{ get; set; }
 		//public Action<OperationResponse> 	OnOperationResponseAction		{ get; set; }
 		public Action<EventData> 			OnEventAction					{ get; set; }
+
 		#endregion
 
 		public string ErrorMessageToShow { get; set; }
@@ -102,10 +103,16 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 			
 			switch (photonEvent.Code)
 			{
+				/*
 			case EventCode.PropertiesChanged:
 				Debug.Log("Got Properties via Event. Update board by room props.");
+				if (OnRoomPropertyChangedAction!=null)
+				{
+					OnRoomPropertyChangedAction()
+				}
 				this.UpdateBoard();
 				break;
+				*/
 			case EventCode.Join:
 				if (this.CurrentRoom.Players.Count == 2 && this.CurrentRoom.IsOpen)
 				{

@@ -99,8 +99,6 @@ namespace HutongGames.PlayMaker.Actions
 				_roomName = roomName.Value;
 			}
 			
-			int pttl = playerTtl.IsNone ? int.MaxValue:playerTtl.Value;
-			
 			ExitGames.Client.Photon.Hashtable _props = new ExitGames.Client.Photon.Hashtable();
 			
 			int i = 0;

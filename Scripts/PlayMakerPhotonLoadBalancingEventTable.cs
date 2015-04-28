@@ -5,10 +5,13 @@ using System;
 using System.Collections.Generic;
 
 using ExitGames.Client.Photon;
+using ExitGames.Client.Photon.LoadBalancing;
 
 using HutongGames.PlayMaker.Ecosystem.Utils;
 
 using HutongGames.PlayMaker.Photon;
+using HutongGames.PlayMaker.Actions;
+
 
 namespace HutongGames.PlayMaker.Photon.TurnBased
 {
@@ -67,6 +70,10 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 				if (_item.Key == data.Code)
 				{
 					Debug.Log ("Broadcasting event: "+_item.EventName);
+
+					// get the custom data.
+					PhotonTurnBasedGetEventProperties.Properties =  data.Parameters[ParameterCode.CustomEventContent] as ExitGames.Client.Photon.Hashtable;
+
 					PlayMakerEvent _event = new PlayMakerEvent(_item.EventName);
 					_event.SendEvent(PlayMakerPhotonLoadBalancingClientProxy.Fsm,EventTarget);
 				}
