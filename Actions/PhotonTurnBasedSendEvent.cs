@@ -15,12 +15,15 @@ namespace HutongGames.PlayMaker.Actions
 	[Tooltip("Send an event with custom code/type and any content to the other players in the same room.")]
 	public class PhotonTurnBasedSendEvent : FsmStateAction
 	{
+		public enum TurnBasedEventKeyFormat {String,Int,Byte};
+
 		[Tooltip("Identifies this type of event (and the content). Your game's event codes can start with 0.")]
 		public FsmInt eventId;
 
 		[Tooltip("Define if this event has to arrive reliably (potentially repeated if it's lost).")]
 		public FsmBool reliable;
 
+		[ActionSection("Data")]
 		[CompoundArray("Event Data", "Key", "Value")]
 		[RequiredField]
 		[UIHint(UIHint.FsmString)]
@@ -29,6 +32,10 @@ namespace HutongGames.PlayMaker.Actions
 		
 		[Tooltip("The variable to set.")]
 		public FsmVar[] variables;
+
+	
+
+		public TurnBasedEventKeyFormat keyFormat;
 
 		[ActionSection("Options, Leave to none for default")]
 
@@ -66,6 +73,8 @@ namespace HutongGames.PlayMaker.Actions
 			keys = new FsmString[]{};
 			variables = new FsmVar[]{};
 
+			keyFormat = TurnBasedEventKeyFormat.String;
+
 			cachingOption = null;
 			interestGroup = new FsmInt(){UseVariable=true};
 			targetActors  = new FsmArray(){UseVariable=true};
@@ -80,9 +89,15 @@ namespace HutongGames.PlayMaker.Actions
 			Hashtable props = new Hashtable();
 			for(int i = 0;i<keys.Length;i++)
 			{
-				props[keys[i].Value] = PlayMakerUtils.GetValueFromFsmVar(Fsm,variables[i]);
+				var _value = PlayMakerUtils.GetValueFromFsmVar(Fsm,variables[i]);;
+				if (keyFormat == TurnBasedEventKeyFormat.Int)
+				{
+					props[int.Parse(keys[i].Value)] = _value;
+				}else if (keyFormat == TurnBasedEventKeyFormat.Byte)
+				{
+					props[byte.Parse(keys[i].Value)] = _value;
+				}
 			}
-
 
 			RaiseEventOptions _options = new RaiseEventOptions();
 			if (!cachingOption.IsNone)

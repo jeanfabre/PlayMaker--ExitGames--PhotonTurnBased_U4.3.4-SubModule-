@@ -45,11 +45,11 @@ namespace HutongGames.PlayMaker.Actions
 					throw new System.ArgumentException("No Parameters");
 				}
 
-				Debug.Log("Properties :"+SupportClass.DictionaryToString(Properties));
+				//Debug.Log("Properties :"+SupportClass.DictionaryToString(Properties));
 
 				for (int i = 0; i < keys.Length; i++) 
 				{	
-					Debug.Log("getting key "+i+" ->"+keys[i].Value);
+					//Debug.Log("getting key "+i+" ->"+keys[i].Value);
 
 					string _keyval = Enum.GetName(keys[i].EnumType,  keys[i].Value);
 					int _keyvalInt =  (int)((object)keys[i].Value);
