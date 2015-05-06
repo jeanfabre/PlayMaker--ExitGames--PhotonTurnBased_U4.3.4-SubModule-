@@ -62,7 +62,7 @@ namespace HutongGames.PlayMaker.Actions
 			proxy._hashTable.Clear();
 			foreach(DictionaryEntry entry in _customProperties)
 			{
-				Debug.Log(entry.Value.GetType());
+				//Debug.Log(entry.Value.GetType());
 
 				proxy._hashTable[entry.Key.ToString()] = entry.Value;
 			}
