@@ -44,14 +44,17 @@ namespace HutongGames.PlayMaker.Photon.TurnBased.Actions
 			
 			foreach (Player player in PlayMakerPhotonLoadBalancingClientProxy.instance.LbcInstance.CurrentRoom.Players.Values)
 			{
+				string _playerDescription = player.ToString();
+				if (player.IsInactive)
+				{
+					_playerDescription += " (inactive)";
+				}
 				if (player.ID == lastPlayerId.Value)
 				{
-					GUILayout.Label(player.ToString() + " (played last)");
+					_playerDescription += " (played last)";
 				}
-				else
-				{
-					GUILayout.Label(player.ToString());
-				}
+
+				GUILayout.Label(_playerDescription,this.LayoutOptions);
 			}
 		}
 		
