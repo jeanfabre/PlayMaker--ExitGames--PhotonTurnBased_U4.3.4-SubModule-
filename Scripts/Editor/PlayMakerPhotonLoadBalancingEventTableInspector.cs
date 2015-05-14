@@ -52,13 +52,15 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 				value =  new PlayMakerByteEventReference();
 			}
 
+			float width = position.width;
+
 			Rect _keyRect = position;
 			_keyRect.width = 30;
 
 			value.Key = (byte)EditorGUI.IntField(_keyRect,(int)value.Key);
 
 			position.x +=35;
-			position.width -=35;
+			position.width -= Application.isPlaying?60:35;
 			if (GUI.Button(
 				position,
 				string.IsNullOrEmpty(value.EventName)?"none":value.EventName, 
@@ -70,6 +72,13 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 				
 			}
 
+			if (Application.isPlaying)
+			{
+				position.x = _keyRect.x + width -15;
+				position.width = 30;
+
+				GUI.Label(position,value.Count.ToString());
+			}
 			return value;
 		}
 

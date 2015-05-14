@@ -20,6 +20,10 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 	{
 		public byte Key = 0;
 		public string EventName = "none";
+
+		[NonSerialized]
+		public int Count = 0;
+
 	}
 
 	public class PlayMakerPhotonLoadBalancingEventTable : MonoBehaviour {
@@ -66,16 +70,22 @@ namespace HutongGames.PlayMaker.Photon.TurnBased
 			//check if we have something in store
 			foreach(var _item in Events)
 			{
-				Debug.Log("_item key "+_item.Key +" code"+data.Code);
+				//Debug.Log("_item key "+_item.Key +" code"+data.Code);
 				if (_item.Key == data.Code)
 				{
 					Debug.Log ("Broadcasting event: "+_item.EventName);
 
+					_item.Count ++;
 					// get the custom data.
 					PhotonTurnBasedGetEventProperties.Properties =  data.Parameters[ParameterCode.CustomEventContent] as ExitGames.Client.Photon.Hashtable;
 
 					PlayMakerEvent _event = new PlayMakerEvent(_item.EventName);
 					_event.SendEvent(PlayMakerPhotonLoadBalancingClientProxy.Fsm,EventTarget);
+
+					#if UNITY_EDITOR
+					UnityEditor.EditorUtility.SetDirty(this);
+					#endif
+
 				}
 			}
 		}

@@ -38,45 +38,37 @@ namespace HutongGames.PlayMaker.Actions
 
 		public override void OnEnter()
 		{
-		
-			try{
-				if (Properties == null)
-				{
-					throw new System.ArgumentException("No Parameters");
-				}
-
-				//Debug.Log("Properties :"+SupportClass.DictionaryToString(Properties));
-
-				for (int i = 0; i < keys.Length; i++) 
-				{	
-					//Debug.Log("getting key "+i+" ->"+keys[i].Value);
-
-					string _keyval = Enum.GetName(keys[i].EnumType,  keys[i].Value);
-					int _keyvalInt =  (int)((object)keys[i].Value);
-					if (Properties.ContainsKey(_keyval))
-					{
-						Debug.Log("found key via string "+i+" ->"+keys[i].Value+" ="+Properties[_keyval]);
-						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[_keyval]);
-					}else if (Properties.ContainsKey(_keyvalInt))
-					{
-						Debug.Log("found key via int "+i+" ->"+keys[i].Value+" ="+Properties[_keyvalInt]);
-						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[_keyvalInt]);
-					}else if (Properties.ContainsKey((byte)_keyvalInt))
-					{
-						Debug.Log("found key via byte "+i+" ->"+keys[i].Value+" ="+Properties[(byte)_keyvalInt]);
-						PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[(byte)_keyvalInt]);
-					}else
-					{
-						Fsm.Event(notFoundEvent);
-					}
-				}
-				
-			}catch(Exception e)
+			if (Properties == null)
 			{
+				throw new System.ArgumentException("No Parameters");
 				Fsm.Event(notFoundEvent);
-				Debug.Log("no properties found "+e);
+				Finish();
+				return;
 			}
-			
+
+		//	Debug.Log("Properties :"+SupportClass.DictionaryToString(Properties));
+
+			for (int i = 0; i < keys.Length; i++) 
+			{	
+			//	Debug.Log("getting key "+i+" ->"+keys[i].Value);
+
+				Type _underlyingType = Enum.GetUnderlyingType(keys[i].EnumType);
+
+				var _keyval = Convert.ChangeType(keys[i].Value,_underlyingType);
+
+
+				if (Properties.ContainsKey(_keyval))
+				{
+					//Debug.Log("found key via string "+i+" ->"+keys[i].Value+" ="+Properties[_keyval]);
+					PlayMakerUtils.ApplyValueToFsmVar(this.Fsm,datas[i],Properties[_keyval]);
+
+				}else
+				{
+					Fsm.Event(notFoundEvent);
+				}
+
+			}
+
 			Finish();
 		}
 	}
