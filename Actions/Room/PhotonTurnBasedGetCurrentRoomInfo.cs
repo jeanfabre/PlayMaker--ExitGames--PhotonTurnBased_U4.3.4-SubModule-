@@ -65,6 +65,9 @@ namespace HutongGames.PlayMaker.Actions
 		[ArrayEditorAttribute(VariableType.String)]
 		public FsmArray propsListedInLobby;
 
+		[Tooltip("Event fired if we are in room.")]
+		public FsmEvent inRoomEvent;
+
 		[Tooltip("Event fired if we are not in a room.")]
 		public FsmEvent notInRoomEvent;
 
@@ -87,6 +90,7 @@ namespace HutongGames.PlayMaker.Actions
 			customPropertyKeys = null;
 			propsListedInLobby = null;
 
+			inRoomEvent = null;
 			notInRoomEvent = null;
 			everyFrame=false;
 			
@@ -177,6 +181,7 @@ namespace HutongGames.PlayMaker.Actions
 				customPropertyKeys.SaveChanges();
 			}
 
+			Fsm.Event(inRoomEvent);
 
 		}
 	}
